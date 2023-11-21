@@ -1,0 +1,4 @@
+Django
+django_rest_passwordreset
+djangorestframework
+djangorestframework_simplejwt
