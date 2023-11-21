@@ -27,6 +27,8 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 class User(AbstractUser):
     username = None
     email = models.EmailField( unique=True)
+    first_name = models.CharField(max_length=25)
+    last_name = models.CharField(max_length=25)
     is_verified = models.BooleanField(default=False)
     otp = models.CharField(max_length=6 , null=True, blank=True)
     
@@ -48,22 +50,22 @@ def upload_location(instance, filename):
     return 'users/%s/profile_photo.%s' % (instance.user.id, extension)
 
 
-class UserProfile(models.Model):
-      user =  models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-      ville = models.CharField(blank=True, max_length=250)
-      gender = models.BooleanField(default=True)
-      job = models.CharField(blank=True, max_length=250)
-      first_name= models.CharField(blank=True, max_length=250)
-      last_name= models.CharField(blank=True, max_length=250)
-      profile_photo = models.FileField(
-      upload_to=upload_location, null=True, blank=True
-    )  
+# class UserProfile(models.Model):
+#       user =  models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+#       ville = models.CharField(blank=True, max_length=250)
+#       gender = models.BooleanField(default=True)
+#       job = models.CharField(blank=True, max_length=250)
+#       first_name= models.CharField(blank=True, max_length=250)
+#       last_name= models.CharField(blank=True, max_length=250)
+#       profile_photo = models.FileField(
+#       upload_to=upload_location, null=True, blank=True
+#     )  
     
 
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(
-            user = instance
-        )
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         UserProfile.objects.create(
+#             user = instance
+#         )

@@ -1,9 +1,8 @@
-from django.shortcuts import render
 from rest_framework.views import APIView 
-from rest_framework.generics import UpdateAPIView, ListAPIView,RetrieveUpdateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
-from .serializers import *
-from .emails import *
+from .serializers import User,UserSerializer,LoginSerializer,VerifyAccountSerializer
+from .emails import send_otp_via_email
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
@@ -11,14 +10,15 @@ from rest_framework.parsers import MultiPartParser
 from django.core import serializers
 
 
-class UpdateProfileView(RetrieveUpdateAPIView):
+something_went_wrong = "something went wrong",
+# class UpdateProfileView(RetrieveUpdateAPIView):
 
-    queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
-    parser_classes = (MultiPartParser, )
-    serializer_class = UserProfileSerializer
-    def get_object(self):
-        return UserProfile.objects.get(user=self.request.user)
+#     queryset = User.objects.all()
+#     permission_classes = (IsAuthenticated,)
+#     parser_classes = (MultiPartParser, )
+#     serializer_class = UserProfileSerializer
+#     def get_object(self):
+#         return UserProfile.objects.get(user=self.request.user)
        
 
 
@@ -48,30 +48,30 @@ class LoginApi(APIView):
                 })
                 refresh = RefreshToken.for_user(user)
                 query_set = User.objects.filter(email=email).values().first()
-                query = UserProfile.objects.filter(user=user).values().first()
-                print(query)
-                userData = {'id':query_set['id'],
+                user_data = {'id':query_set['id'],
                             'email': query_set['email'],
                             'password':query_set['password'],
                             'isVerified':query_set['is_verified'],
                              'otp':query_set['otp'],
-                             'profile':{
-                                 "ville":query['ville'],
-                                 "gender":query['gender'],
-                                 "job":query['job'],
-                                 'first_name': query['first_name'],
-                                 'last_name': query['last_name'],
-                                 'profile_photo':query['profile_photo']
-                             }
+                              'first_name': query_set['first_name'],
+                                 'last_name': query_set['last_name']
+                            #  'profile':{
+                            #      "ville":query['ville'],
+                            #      "gender":query['gender'],
+                            #      "job":query['job'],
+                            #      'first_name': query['first_name'],
+                            #      'last_name': query['last_name'],
+                            #      'profile_photo':query['profile_photo']
+                            #  }
                             }
                 return Response({
                 'accessToken':str(refresh.access_token),  
-                'user': userData,
+                'user': user_data,
                 })
             
             return Response({
                 'status':400,
-                'message':'something went wrong',
+                'message':something_went_wrong,
                 'data': serializer._errors
             })
         except Exception as e:
@@ -98,7 +98,7 @@ class RegisterApi(APIView):
             
             return Response({
                 'status':400,
-                'message':'something went wrong',
+                'message':something_went_wrong,
                 'data': serializer._errors
             })
         except Exception as e:
@@ -121,13 +121,13 @@ class VerifyOTP(APIView):
                 if not user.exists():
                      return Response({
                     'status':400,
-                    'message':'something went wrong',
+                    'message':something_went_wrong,
                     'data': 'invalid email'
                          })
-                if not user[0].otp == otp:
+                if  user[0].otp != otp:
                       return Response({
                     'status':400,
-                    'message':'something went wrong',
+                    'message':something_went_wrong,
                     'data': 'wrong otp'
                          })
                 user = user.first()
@@ -142,7 +142,7 @@ class VerifyOTP(APIView):
             
             return Response({
                 'status':400,
-                'message':'something went wrong',
+                'message':something_went_wrong,
                 'data': serializer._errors
             })
         except Exception as e:
