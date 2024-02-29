@@ -16,6 +16,8 @@ urlpatterns = [
       path('api/choice/delte/<code>', DeleteChoiceView.as_view()),
       path('api/question/update/<code>', UpdateQuestionView.as_view()),
       path('api/question/delete/<code>', DeleteQuestionView.as_view()), 
+      path('api/rides', RidesView.as_view()), 
+
 
 
    

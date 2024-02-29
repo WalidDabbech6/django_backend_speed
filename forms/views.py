@@ -9,7 +9,6 @@ from django.http import JsonResponse
 from aymenProject.pagination import PageNumberPaginationDataOnly
 from .serializers import *
 from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser
 import random
@@ -321,3 +320,18 @@ class FormQuestionsView(APIView):
             'questions' : result
         }
         return Response(data=data)
+    
+
+class RidesView(generics.ListCreateAPIView):
+    # permission_classes = (IsAuthenticated,)
+    serializer_class = RideSerilizer
+    def get_queryset(self):
+        return Ride.objects.all()
+    def post(self,request):     
+        origin_shift = request.data["origin"];
+        destination_shift = request.data["destination"]
+        if (request.data["origin"] != "TUN"):
+            origin_shift = request.data["destination"]
+            destination_shift = request.data["origin"]
+        ride = Ride.objects.get(origin=origin_shift,destination=destination_shift)
+        return Response(RideSerilizer(ride).data,status=status.HTTP_200_OK) 

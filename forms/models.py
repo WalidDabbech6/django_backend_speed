@@ -48,3 +48,8 @@ class Responses(models.Model):
     responder = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "responder", blank = True, null = True)
     responder_email = models.EmailField(blank = True)
     response = models.ManyToManyField(Answer, related_name = "response")
+
+class Ride(models.Model):
+    origin = models.CharField(max_length=50)
+    destination = models.CharField(max_length=50)
+    price = models.FloatField()

@@ -8,7 +8,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser
 from django.core import serializers
-
+from rest_framework import status
+import json
 
 something_went_wrong = "something went wrong",
 # class UpdateProfileView(RetrieveUpdateAPIView):
@@ -26,7 +27,7 @@ something_went_wrong = "something went wrong",
 
 class LoginApi(APIView):
     serializer_class = LoginSerializer
-    def post(self,request):
+    def  post (self,request):
         try:
             data = request.data
             serializer = LoginSerializer(data=data)
@@ -39,22 +40,23 @@ class LoginApi(APIView):
                 'status':400,
                 'message':'Invalid password',
                 'data': {}
-                })
+                },status.HTTP_400_BAD_REQUEST)
+
                 if user.is_verified is False:
+                     
                      return Response({
                 'status':400,
                 'message':'your account is not verified',
                 'data': {}
-                })
-                refresh = RefreshToken.for_user(user)
+                },status.HTTP_403_FORBIDDEN)
+
                 query_set = User.objects.filter(email=email).values().first()
                 user_data = {'id':query_set['id'],
                             'email': query_set['email'],
-                            'password':query_set['password'],
                             'isVerified':query_set['is_verified'],
-                             'otp':query_set['otp'],
-                              'first_name': query_set['first_name'],
-                                 'last_name': query_set['last_name']
+                            'otp':query_set['otp'],
+                            'first_name': query_set['first_name'],
+                            'last_name': query_set['last_name']
                             #  'profile':{
                             #      "ville":query['ville'],
                             #      "gender":query['gender'],
@@ -63,17 +65,19 @@ class LoginApi(APIView):
                             #      'last_name': query['last_name'],
                             #      'profile_photo':query['profile_photo']
                             #  }
-                            }
-                return Response({
-                'accessToken':str(refresh.access_token),  
-                'user': user_data,
-                })
-            
+                        }
+                try:
+                    refresh = RefreshToken.for_user(user)
+                    return Response({
+                    'accessToken':f"Bearer {refresh}",  
+                    'user': user_data},status=status.HTTP_200_OK)
+                except Exception as e:
+                    print(e)
             return Response({
                 'status':400,
                 'message':something_went_wrong,
                 'data': serializer._errors
-            })
+            },status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
 

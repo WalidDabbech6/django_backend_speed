@@ -51,3 +51,21 @@ class QuestionChoice(serializers.ModelSerializer):
         return obj.question_type
     def get_score(self,obj):
         return obj.score
+    
+
+class RideSerilizer(serializers.ModelSerializer):
+    origin = serializers.SerializerMethodField('get_origin')
+    destination = serializers.SerializerMethodField('get_destination')
+    price = serializers.SerializerMethodField('get_price')
+   
+    class Meta:
+        model = Ride
+        exclude = ('id',)
+    def get_origin(self, obj):
+        return obj.origin
+    def get_destination(self,obj):
+        return obj.destination
+    def get_price(self,obj):
+        print(self)
+        return obj.price
+   
