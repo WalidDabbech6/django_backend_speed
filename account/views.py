@@ -12,14 +12,14 @@ from rest_framework import status
 import json
 
 something_went_wrong = "something went wrong",
-# class UpdateProfileView(RetrieveUpdateAPIView):
+class UpdateProfileView(RetrieveUpdateAPIView):
 
-#     queryset = User.objects.all()
-#     permission_classes = (IsAuthenticated,)
-#     parser_classes = (MultiPartParser, )
-#     serializer_class = UserProfileSerializer
-#     def get_object(self):
-#         return UserProfile.objects.get(user=self.request.user)
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    parser_classes = (MultiPartParser, )
+    serializer_class = UserSerializer
+    def get_object(self):
+        return User.objects.get(email=self.request.user)
        
 
 
@@ -43,7 +43,7 @@ class LoginApi(APIView):
                 },status.HTTP_400_BAD_REQUEST)
 
                 if user.is_verified is False:
-                     
+
                      return Response({
                 'status':400,
                 'message':'your account is not verified',
@@ -69,7 +69,7 @@ class LoginApi(APIView):
                 try:
                     refresh = RefreshToken.for_user(user)
                     return Response({
-                    'accessToken':f"Bearer {refresh}",  
+                    'accessToken':f"Bearer {refresh.access_token}",  
                     'user': user_data},status=status.HTTP_200_OK)
                 except Exception as e:
                     print(e)
