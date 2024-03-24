@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('', include('account.urls')),
     path('', include('forms.urls')),
+    path('', include('conf.swagger')),
     path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     url(r'^(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,})
 ]

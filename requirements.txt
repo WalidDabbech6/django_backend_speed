@@ -3,3 +3,4 @@ django_rest_passwordreset
 djangorestframework
 djangorestframework_simplejwt==5.3.0
 django-cors-headers
+drf-yasg

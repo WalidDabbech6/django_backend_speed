@@ -1,5 +1,5 @@
 from rest_framework.views import APIView 
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView,CreateAPIView
 from rest_framework.response import Response
 from .serializers import User,UserSerializer,LoginSerializer,VerifyAccountSerializer
 from .emails import send_otp_via_email
@@ -25,8 +25,9 @@ class UpdateProfileView(RetrieveUpdateAPIView):
 
 
 
-class LoginApi(APIView):
+class LoginApi(CreateAPIView):
     serializer_class = LoginSerializer
+    permission_classes = []
     def  post (self,request):
         try:
             data = request.data
@@ -84,7 +85,7 @@ class LoginApi(APIView):
 
 
             
-class RegisterApi(APIView):
+class RegisterApi(CreateAPIView):
     serializer_class = UserSerializer
     def post(self,request):
         try:
@@ -112,7 +113,7 @@ class RegisterApi(APIView):
 
 
 
-class VerifyOTP(APIView): 
+class VerifyOTP(CreateAPIView): 
     serializer_class = UserSerializer
     def post(self,request):
         try:
