@@ -73,7 +73,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'aymenProject.urls'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',  # Add your frontend URL here
+    'http://localhost:4200',  # Add your frontend URL here
 ]
 
 CORS_ALLOW_METHODS = [
