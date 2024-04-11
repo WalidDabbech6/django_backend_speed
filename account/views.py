@@ -99,13 +99,13 @@ class RegisterApi(CreateAPIView):
                     'status':200,
                     'message': 'registration successfully check email',
                     'data':serializer.data,
-                })
+                },status.HTTP_200_OK)
             
             return Response({
                 'status':400,
                 'message':something_went_wrong,
                 'data': serializer._errors
-            })
+            },status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
 
@@ -128,13 +128,13 @@ class VerifyOTP(CreateAPIView):
                     'status':400,
                     'message':something_went_wrong,
                     'data': 'invalid email'
-                         })
+                         },status.HTTP_400_BAD_REQUEST)
                 if  user[0].otp != otp:
                       return Response({
                     'status':400,
-                    'message':something_went_wrong,
+                    'message':'wrong otp',
                     'data': 'wrong otp'
-                         })
+                         },status.HTTP_400_BAD_REQUEST)
                 user = user.first()
                 user.is_verified = True
                 user.save()
@@ -143,12 +143,12 @@ class VerifyOTP(CreateAPIView):
                     'status':200,
                     'message': 'account verified',
                     'data':{},
-                })
+                },status.HTTP_200_OK)
             
             return Response({
                 'status':400,
                 'message':something_went_wrong,
                 'data': serializer._errors
-            })
+            },status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)

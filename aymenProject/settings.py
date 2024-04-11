@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-%ivk$1u%1*-y5xctf!1q#55ly$3$-67h9723!^*13+y#%taylx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "192.168.1.60"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -36,6 +36,8 @@ SWAGGER_SETTINGS = {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header',
+            'scheme': 'bearer',
+            'bearerFormat': 'JWT',
             'description': 'Bearer token authentication',
         }
     },
@@ -73,8 +75,11 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'aymenProject.urls'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',  # Add your frontend URL here
+    'http://localhost:4200', 
+     'http://192.168.1.111:4200' # Add your frontend URL here
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_METHODS = [
     'GET',
@@ -137,13 +142,25 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# Set the default language code to French
+LANGUAGE_CODE = 'fr'
 
-TIME_ZONE = 'UTC'
+import locale
+try:
+    locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+except locale.Error:
+    try:
+        locale.setlocale(locale.LC_TIME, 'fr_FR.utf8')
+    except locale.Error:
+        print("French locale is not available on this system.")
+
+TIME_ZONE = 'Africa/Tunis'
 
 USE_I18N = True
 
 USE_TZ = True
+
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -190,7 +207,7 @@ AUTH_USER_MODEL = "account.User"
 DATE_FORMAT = '%d/%m/%Y'
 USE_L10N = False
 
-DATE_INPUT_FORMATS = ['%d/%m/%Y']  
+DATE_INPUT_FORMATS = ['%d/%m/%Y']
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

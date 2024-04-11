@@ -13,5 +13,9 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 ADD . /app/
 
+RUN apt-get update && apt-get install -y locales locales-all
+
+RUN update-locale LANG=fr_FR.UTF-8
+
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
