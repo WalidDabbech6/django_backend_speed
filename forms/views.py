@@ -61,3 +61,12 @@ class BookingListCreateAPIView(generics.ListCreateAPIView):
 class BookingRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+    permission_classes = (IsAuthenticated,)
+    def get_queryset(self):
+        # Retrieve the authenticated user making the request
+        user = self.request.user
+        
+        # Filter the queryset to include only bookings associated with the user
+        queryset = Booking.objects.filter(user=user)
+        
+        return queryset

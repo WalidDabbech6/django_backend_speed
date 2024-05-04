@@ -29,6 +29,7 @@ class User(AbstractUser):
     email = models.EmailField( unique=True)
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
+    phone = models.CharField(blank=True,null=True,max_length=25)
     is_verified = models.BooleanField(default=False)
     otp = models.CharField(max_length=6 , null=True, blank=True)
     

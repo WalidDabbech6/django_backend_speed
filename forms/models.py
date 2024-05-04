@@ -14,5 +14,7 @@ class Booking(models.Model):
     price = models.FloatField()
     booking_time = models.TimeField()
     date = models.DateField(null=True)
+    payed = models.BooleanField(default=False)
+    payment_ref = models.CharField(blank=True,null=True,max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     

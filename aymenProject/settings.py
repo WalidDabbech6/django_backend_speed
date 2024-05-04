@@ -161,8 +161,9 @@ USE_I18N = True
 USE_TZ = True
 
 
-
-
+API_KEY ='6617e26958953ef7de7c9b6b:aFQTf4sGdC1uyZf3IWV1O2M81F'
+WALLET_ID ='6617e26958953ef7de7c9b6f'
+PAYMENT_URL='https://api.preprod.konnect.network/api/v2/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 

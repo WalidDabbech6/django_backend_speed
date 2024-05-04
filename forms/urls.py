@@ -6,7 +6,7 @@ from .views import *
 urlpatterns = [
     path('api/rides', RidesView.as_view()), 
     path('api/bookings', BookingListCreateAPIView.as_view(), name='booking-list-create'),
-    path('bookings/<int:pk>/', BookingRetrieveUpdateAPIView.as_view(), name='booking-retrieve-update'),
+    path('api/bookings/<int:pk>/', BookingRetrieveUpdateAPIView.as_view(), name='booking-retrieve-update'),
 
 
 
