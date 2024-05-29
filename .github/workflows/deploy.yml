@@ -3,7 +3,7 @@ name: Deploy Django Application
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
