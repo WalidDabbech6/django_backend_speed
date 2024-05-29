@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%ivk$1u%1*-y5xctf!1q#55ly$3$-67h9723!^*13+y#%taylx'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -161,9 +163,10 @@ USE_I18N = True
 USE_TZ = True
 
 
-API_KEY ='6617e26958953ef7de7c9b6b:aFQTf4sGdC1uyZf3IWV1O2M81F'
-WALLET_ID ='6617e26958953ef7de7c9b6f'
-PAYMENT_URL='https://api.preprod.konnect.network/api/v2/'
+API_KEY = os.getenv('API_KEY')
+WALLET_ID = os.getenv('WALLET_ID')
+PAYMENT_URL = os.getenv('PAYMENT_URL')
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -214,7 +217,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'psycotherapeur@gmail.com'
-EMAIL_HOST_PASSWORD = 'uvfonptlbtdvrmdi'
-
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 MEDIA_ROOT ='media'

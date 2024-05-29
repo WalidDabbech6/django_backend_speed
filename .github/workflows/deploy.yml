@@ -1,0 +1,59 @@
+name: Deploy Django Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        os: [centos-7]
+
+    env:
+      ANSIBLE_HOST_KEY_CHECKING: 'False'
+      DOCKER_BUILDKIT: 1
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install Ansible
+      run: sudo yum install -y epel-release && sudo yum install -y ansible
+
+    - name: Install Docker Compose
+      run: |
+        sudo yum install -y yum-utils
+        sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+        sudo yum install -y docker-ce docker-ce-cli containerd.io
+        sudo systemctl start docker
+        sudo systemctl enable docker
+        sudo yum install -y python3-pip
+        sudo pip3 install docker-compose
+
+    - name: Copy .env file
+      run: echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
+
+    - name: Create vault password file
+      run: echo "${{ secrets.VAULT_PASSWORD }}" > .vault_pass
+
+    - name: Add SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Run Ansible Playbook
+      run: ansible-playbook -i /home/jhon/deploySpeedApp/hosts.ini /home/jhon/deploySpeedApp/deployBack.yml --vault-password-file .vault_pass
+      env:
+        ANSIBLE_HOST_KEY_CHECKING: 'False'
+
+    - name: Remove the .env and .vault_pass files
+      run: rm -f .env .vault_pass
+

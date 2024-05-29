@@ -43,8 +43,8 @@ class MakePaymentApiView(views.APIView):
             "orderId": f'{bookig.pk}',
             "webhook": "https://merchant.tech/api/notification_payment",
             "silentWebhook": 'true',
-            "successUrl": "http://localhost:4200/success",
-            "failUrl": "http://localhost:4200/fail",
+            "successUrl": "https://olataxi24.com/success",
+            "failUrl": "https://olataxi24.com/fail",
             "theme": "light"
         }
         response = requests.post(f'{settings.PAYMENT_URL}/payments/init-payment', data=data,headers=headers)
