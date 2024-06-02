@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import RetrieveUpdateAPIView,CreateAPIView
 from rest_framework.response import Response
 from .serializers import User,UserSerializer,LoginSerializer,VerifyAccountSerializer
-from .emails import send_otp_via_email
+from .emails import send_otp_email
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
@@ -10,6 +10,8 @@ from rest_framework.parsers import MultiPartParser
 from django.core import serializers
 from rest_framework import status
 import json
+import random
+
 
 something_went_wrong = "something went wrong",
 class UpdateProfileView(RetrieveUpdateAPIView):
@@ -94,7 +96,13 @@ class RegisterApi(CreateAPIView):
 
             if serializer.is_valid():
                 serializer.save()
-                send_otp_via_email(serializer.data['email'])
+                subject = 'Your account verification email'
+                otp = random.randint(1000,9999)
+                message = f'Your otp is {otp}'
+                user_obj = User.objects.get(email = serializer.data['email'])
+                user_obj.otp = otp
+                user_obj.save()
+                send_otp_email(subject=subject,message=message,recipient_list=serializer.data['email'])
                 return Response ({
                     'status':200,
                     'message': 'registration successfully check email',
